@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react'; // useState salva a lista de filmes
+import Tmdb from './Tmdb';
+import MovieRow from './components/MovieRow'
+import './App.css'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export default () => {
+
+    const [movieList, setMovieList] = useState([]); // 
+
+    useEffect(() => {
+
+        //Quando a tela for carregada será executada essa função
+        const loadAll = async () => {
+            // Pega a lista total
+            let list = await Tmdb.getHomeList();
+            setMovieList(list);
+        }
+
+        loadAll();
+    }, []);
+
+    // - Header
+    // - Destaque
+    // - Listas
+    // - Rodapé 
+
+    return(
+        <div className="page">
+            <section className="lists">
+                {/* Função que retorna as listas */}
+                {movieList.map((item, key) => (
+                    <MovieRow key={key} title={item.title} items={item.items}/> // componente que retorna as listas
+                ))}
+            </section>
+        </div>
+    )
 }
-
-export default App;
